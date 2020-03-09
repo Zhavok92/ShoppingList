@@ -30,21 +30,67 @@ Window {
             anchors.margins: mainWindow.width * 0.05
             spacing: mainWindow.height * 0.04
 
-            RoundButton {
-                id: addButton
-                Layout.alignment: Qt.AlignRight
-                Material.background: Material.Cyan
+            RowLayout {
+                Layout.minimumWidth: parent.width
 
-                Image {
-                    id: image
-                    anchors.centerIn: parent
-                    width: parent.width * 0.5
-                    height: parent.height * 0.5
-                    source: "images/add.png"
+                ToolButton {
+                    id: drawerButton
+                    Layout.alignment: Qt.AlignLeft
+
+                    Image {
+                        id: drawerButtonIcon
+                        anchors.fill: parent
+                        source: "images/drawer.png"
+                    }
+
+                    DropShadow {
+                        anchors.fill: drawerButtonIcon
+                        horizontalOffset: 3
+                        verticalOffset: 3
+                        radius: 10
+                        samples: 20
+                        color: "#80000000"
+                        source: drawerButtonIcon
+                    }
+
+                    onPressed: {
+                        colorOverl.visible = true
+                    }
+
+                    onPressedChanged: {
+                        colorOverl.visible = false
+                    }
+
+                    onClicked: {
+                        infoDrawer.open()
+                    }
+
+                    ColorOverlay {
+                        id: colorOverl
+                        visible: false
+                        anchors.fill: drawerButton
+                        source: drawerButtonIcon
+                        color: "grey"
+                        opacity: 0.5
+                    }
                 }
 
-                onClicked:  {
-                    addItemWindow.open()
+                RoundButton {
+                    id: addButton
+                    Layout.alignment: Qt.AlignRight
+                    Material.background: Material.Cyan
+
+                    Image {
+                        id: image
+                        anchors.centerIn: parent
+                        width: parent.width * 0.5
+                        height: parent.height * 0.5
+                        source: "images/add.png"
+                    }
+
+                    onClicked:  {
+                        addItemWindow.open()
+                    }
                 }
             }
 
@@ -128,7 +174,11 @@ Window {
         }
     }
 
+
+
     AddItemPopup { id: addItemWindow }
+
+    InformationDrawer { id: infoDrawer }
 
     OpacityAnimator {
         id: opacityAnim
