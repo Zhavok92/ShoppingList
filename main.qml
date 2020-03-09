@@ -45,9 +45,6 @@ Window {
 
                 onClicked:  {
                     addWindow.open();
-                    opacityAnim.from = 1
-                    opacityAnim.to = 0.4
-                    opacityAnim.start()
                 }
             }
 
@@ -136,6 +133,20 @@ Window {
         anchors.centerIn: parent
         width: root.width
         height: root.height * 0.4
+
+        onClosed: {
+            opacityAnim.from = 0.4
+            opacityAnim.to = 1
+            opacityAnim.start()
+            itemName.text = "";
+            itemQuantity.text = "";
+        }
+
+        onOpened: {
+            opacityAnim.from = 1
+            opacityAnim.to = 0.4
+            opacityAnim.start()
+        }
 
         Image {
             source: "images/addBackground.png"
@@ -236,13 +247,7 @@ Window {
                     }
 
                     onClicked: {
-                        addWindow.visible = false
                         addWindow.close()
-                        opacityAnim.from = 0.4
-                        opacityAnim.to = 1
-                        opacityAnim.start()
-                        itemName.text = "";
-                        itemQuantity.text = "";
                     }
                 }
 
@@ -265,11 +270,6 @@ Window {
                             save();
                         }
                         addWindow.close()
-                        opacityAnim.from = 0.4
-                        opacityAnim.to = 1
-                        opacityAnim.start()
-                        itemName.text = "";
-                        itemQuantity.text = "";
                     }
                 }
             }
