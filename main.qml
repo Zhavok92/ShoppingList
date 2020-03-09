@@ -189,6 +189,10 @@ Window {
                             pointSize: addWindow.height * 0.05
                             italic: true
                         }
+
+                        onAccepted: {
+                            itemQuantity.forceActiveFocus()
+                        }
                     }
                 }
             }
@@ -225,6 +229,10 @@ Window {
                             pointSize: addWindow.height * 0.05
                             italic: true
                         }
+
+                        onAccepted: {
+                            acceptButton.accepted()
+                        }
                     }
                 }
             }
@@ -252,6 +260,7 @@ Window {
                 }
 
                 RoundButton {
+                    id: acceptButton
                     Material.background: Material.white
                     Layout.minimumWidth: height
                     Layout.fillHeight: true
@@ -265,6 +274,10 @@ Window {
                     }
 
                     onClicked: {
+                        accepted()
+                    }
+
+                    function accepted() {
                         if(itemName.length > 0) {
                             listM.addItem(itemName.text, itemQuantity.text)
                             save();
