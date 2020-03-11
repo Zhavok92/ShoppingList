@@ -6,5 +6,6 @@
         <file>images/accept.png</file>
         <file>images/decline.png</file>
         <file>images/drawer.png</file>
+        <file>images/drawerBackground.png</file>
     </qresource>
 </RCC>

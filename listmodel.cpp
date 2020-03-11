@@ -115,7 +115,6 @@ QString ListModel::getItemsAsJson() {
 }
 
 void ListModel::setItemsByJson(QString jsonStr) {
-    clear();
     QJsonDocument doc = QJsonDocument::fromJson(jsonStr.toUtf8());
     QJsonArray jsonArr = doc.array();
     foreach(const QJsonValue val, jsonArr) {

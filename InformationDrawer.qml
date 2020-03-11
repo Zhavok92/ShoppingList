@@ -13,12 +13,53 @@ Drawer {
         color: "#f5f5f0"
     }
 
+    Image {
+        id: background
+        source: "images/drawerBackground.png"
+        width: drawer.width
+        height: drawer.height * 0.3
+    }
+
     ColumnLayout {
-        anchors.top: parent.top
+        anchors.top: background.bottom
         anchors.topMargin: parent.height * 0.04
         anchors.horizontalCenter: parent.horizontalCenter
         width: parent.width * 0.8
         height: parent.height * 0.2
+
+        Button {
+            Layout.fillWidth: true
+            text: "Einkaufsliste kopieren"
+            font {
+                family: fontFamily
+                pointSize: fontSize
+                capitalization: Font.MixedCase
+            }
+            Material.background: Material.Cyan
+            onClicked: {
+                clipboard.setClipboard(listM.getItemsAsJson())
+            }
+        }
+
+        Button {
+            Layout.fillWidth: true
+            text: "Einkaufsliste einfügen"
+            font {
+                family: fontFamily
+                pointSize: fontSize
+                capitalization: Font.MixedCase
+            }
+            Material.background: Material.Cyan
+            onClicked: {
+                listM.setItemsByJson(clipboard.getClipboard())
+                save()
+            }
+        }
+
+        ToolSeparator {
+            Layout.fillWidth: true
+            orientation: Qt.Horizontal
+        }
 
         Label {
             text: "Developed by: Marcel Schmidt"
@@ -64,7 +105,7 @@ Drawer {
 
         Label {
             Text {
-                text: "Backgounds by <a href='https://pixabay.com'>Pixabay</a> and <a href='https://www.pexels.com'>Pexels</a>"
+                text: "Backgounds by <a href='https://pixabay.com'>Pixabay</a>"
                 onLinkActivated: Qt.openUrlExternally(link)
                 font {
                     family: fontFamily
@@ -72,31 +113,6 @@ Drawer {
                 }
             }
             wrapMode: Label.Wrap
-        }
-
-        ToolSeparator {
-            Layout.fillWidth: true
-            orientation: Qt.Horizontal
-        }
-
-        Button {
-            Layout.fillWidth: true
-            text: "Einkaufsliste kopieren"
-            font {
-                family: fontFamily
-                pointSize: fontSize
-            }
-            Material.background: Material.Cyan
-        }
-
-        Button {
-            Layout.fillWidth: true
-            text: "Einkaufsliste einfügen"
-            font {
-                family: fontFamily
-                pointSize: fontSize
-            }
-            Material.background: Material.Cyan
         }
     }
 }
