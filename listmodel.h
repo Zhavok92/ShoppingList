@@ -23,6 +23,7 @@ public:
 
     Q_INVOKABLE void addItem(const QString& itemName, const QString& itemQuantity);
     Q_INVOKABLE void removeItem(const int index);
+    Q_INVOKABLE void editItem(const QString& newItemName, const QString& newItemQuantity, int index);
     Q_INVOKABLE void clear();
     Q_INVOKABLE int count();
     Q_INVOKABLE QString getItemsAsJson();

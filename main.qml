@@ -123,6 +123,7 @@ Window {
                 opacity: 0.8
 
                 Text {
+                    id: test
                     text: name
                     anchors.left: parent.left
                     anchors.margins: parent.width * 0.1
@@ -160,6 +161,12 @@ Window {
                         else {
                             anim.start()
                         }
+                    }
+                    onDoubleClicked: {
+                        addItemWindow.open()
+                        addItemWindow.iName = name
+                        addItemWindow.iQuantity = quantity
+                        addItemWindow.index = index
                     }
                 }
 

@@ -4,15 +4,14 @@ import QtQuick.Layouts 1.12
 import QtQuick.Controls.Material 2.12
 
 Drawer {
-
     property real fontSize: root.width * 0.03
     property string fontFamily: "Serif"
     id: drawer
     width: parent.width * 0.75
     height: parent.height
-    Material.background: Material.Teal
-    interactive: true
-    opacity: 0.9
+    background: Rectangle {
+        color: "#f5f5f0"
+    }
 
     ColumnLayout {
         anchors.top: parent.top
@@ -23,6 +22,15 @@ Drawer {
 
         Label {
             text: "Developed by: Marcel Schmidt"
+            font {
+                family: fontFamily
+                pointSize: fontSize
+            }
+            wrapMode: Label.Wrap
+        }
+
+        Label {
+            text: "Version: 1.1"
             font {
                 family: fontFamily
                 pointSize: fontSize
@@ -64,6 +72,31 @@ Drawer {
                 }
             }
             wrapMode: Label.Wrap
+        }
+
+        ToolSeparator {
+            Layout.fillWidth: true
+            orientation: Qt.Horizontal
+        }
+
+        Button {
+            Layout.fillWidth: true
+            text: "Einkaufsliste kopieren"
+            font {
+                family: fontFamily
+                pointSize: fontSize
+            }
+            Material.background: Material.Cyan
+        }
+
+        Button {
+            Layout.fillWidth: true
+            text: "Einkaufsliste einfügen"
+            font {
+                family: fontFamily
+                pointSize: fontSize
+            }
+            Material.background: Material.Cyan
         }
     }
 }

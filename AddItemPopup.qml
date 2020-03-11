@@ -4,6 +4,10 @@ import QtQuick.Layouts 1.12
 import QtQuick.Controls.Material 2.12
 
 Popup {
+    property int index: -1
+    property alias iName: itemName.text
+    property alias iQuantity: itemQuantity.text
+
     id: addWindow
     anchors.centerIn: parent
     width: root.width
@@ -149,14 +153,20 @@ Popup {
                 }
 
                 onClicked: {
-                    accepted()
+                    acceptButton.accepted()
                 }
 
                 function accepted() {
                     if(itemName.length > 0) {
-                        listM.addItem(itemName.text, itemQuantity.text)
+                        if(index === -1) {
+                        listM.addItem(iName, iQuantity)
+                        }
+                        else {
+                            listM.editItem(iName, iQuantity, index)
+                        }
                         save();
                     }
+                    index = -1
                     addWindow.close()
                 }
             }
