@@ -28,7 +28,7 @@ Window {
         ColumnLayout {
             anchors.fill: parent
             anchors.margins: mainWindow.width * 0.05
-            spacing: mainWindow.height * 0.04
+            spacing: mainWindow.height * 0.08
 
             RowLayout {
                 Layout.minimumWidth: parent.width
@@ -202,6 +202,7 @@ Window {
 
     function load() {
         if (datastore) {
+            listM.clear()
             listM.setItemsByJson(datastore)
         }
     }

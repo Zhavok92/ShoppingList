@@ -3,6 +3,7 @@
 #include <QQuickStyle>
 #include <QQmlContext>
 #include "listmodel.h"
+#include "clipboard.h"
 
 int main(int argc, char *argv[])
 {
@@ -16,9 +17,11 @@ int main(int argc, char *argv[])
     QQuickStyle::setStyle("Material");
 
     ListModel model;
+    Clipboard clipboard;
 
     QQmlApplicationEngine engine;
     engine.rootContext()->setContextProperty("listM", &model);
+    engine.rootContext()->setContextProperty("clipboard", &clipboard);
 
     const QUrl url(QStringLiteral("qrc:/main.qml"));
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,

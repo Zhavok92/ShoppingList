@@ -10,8 +10,9 @@ Popup {
 
     id: addWindow
     anchors.centerIn: parent
-    width: root.width
+    width: root.width * 0.9
     height: root.height * 0.4
+    padding: root.width * 0.02
 
     onClosed: {
         opacityAnim.from = 0.4
