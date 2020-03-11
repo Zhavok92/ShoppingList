@@ -88,6 +88,12 @@ void ListModel::removeItem(const int index) {
     endRemoveRows();
 }
 
+void ListModel::editItem(const QString& newItemName, const QString& newItemQuantity, int index) {
+    list.at(index)->setItemName(newItemName);
+    list.at(index)->setItemQuantity(newItemQuantity);
+    emit dataChanged(this->index(index,0),this->index(index,0));
+}
+
 void ListModel::clear() {
     list.clear();
 }
@@ -109,7 +115,6 @@ QString ListModel::getItemsAsJson() {
 }
 
 void ListModel::setItemsByJson(QString jsonStr) {
-    clear();
     QJsonDocument doc = QJsonDocument::fromJson(jsonStr.toUtf8());
     QJsonArray jsonArr = doc.array();
     foreach(const QJsonValue val, jsonArr) {

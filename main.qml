@@ -28,23 +28,69 @@ Window {
         ColumnLayout {
             anchors.fill: parent
             anchors.margins: mainWindow.width * 0.05
-            spacing: mainWindow.height * 0.04
+            spacing: mainWindow.height * 0.08
 
-            RoundButton {
-                id: addButton
-                Layout.alignment: Qt.AlignRight
-                Material.background: Material.Cyan
+            RowLayout {
+                Layout.minimumWidth: parent.width
 
-                Image {
-                    id: image
-                    anchors.centerIn: parent
-                    width: parent.width * 0.5
-                    height: parent.height * 0.5
-                    source: "images/add.png"
+                ToolButton {
+                    id: drawerButton
+                    Layout.alignment: Qt.AlignLeft
+
+                    Image {
+                        id: drawerButtonIcon
+                        anchors.fill: parent
+                        source: "images/drawer.png"
+                    }
+
+                    DropShadow {
+                        anchors.fill: drawerButtonIcon
+                        horizontalOffset: 3
+                        verticalOffset: 3
+                        radius: 10
+                        samples: 20
+                        color: "#80000000"
+                        source: drawerButtonIcon
+                    }
+
+                    onPressed: {
+                        colorOverl.visible = true
+                    }
+
+                    onPressedChanged: {
+                        colorOverl.visible = false
+                    }
+
+                    onClicked: {
+                        infoDrawer.open()
+                    }
+
+                    ColorOverlay {
+                        id: colorOverl
+                        visible: false
+                        anchors.fill: drawerButton
+                        source: drawerButtonIcon
+                        color: "grey"
+                        opacity: 0.5
+                    }
                 }
 
-                onClicked:  {
-                    addWindow.open();
+                RoundButton {
+                    id: addButton
+                    Layout.alignment: Qt.AlignRight
+                    Material.background: Material.Cyan
+
+                    Image {
+                        id: image
+                        anchors.centerIn: parent
+                        width: parent.width * 0.5
+                        height: parent.height * 0.5
+                        source: "images/add.png"
+                    }
+
+                    onClicked:  {
+                        addItemWindow.open()
+                    }
                 }
             }
 
@@ -77,6 +123,7 @@ Window {
                 opacity: 0.8
 
                 Text {
+                    id: test
                     text: name
                     anchors.left: parent.left
                     anchors.margins: parent.width * 0.1
@@ -115,6 +162,12 @@ Window {
                             anim.start()
                         }
                     }
+                    onDoubleClicked: {
+                        addItemWindow.open()
+                        addItemWindow.iName = name
+                        addItemWindow.iQuantity = quantity
+                        addItemWindow.index = index
+                    }
                 }
 
                 NumberAnimation {
@@ -128,153 +181,11 @@ Window {
         }
     }
 
-    Popup {
-        id: addWindow
-        anchors.centerIn: parent
-        width: root.width
-        height: root.height * 0.4
 
-        onClosed: {
-            opacityAnim.from = 0.4
-            opacityAnim.to = 1
-            opacityAnim.start()
-            itemName.text = "";
-            itemQuantity.text = "";
-        }
 
-        onOpened: {
-            opacityAnim.from = 1
-            opacityAnim.to = 0.4
-            opacityAnim.start()
-        }
+    AddItemPopup { id: addItemWindow }
 
-        Image {
-            source: "images/addBackground.png"
-            anchors.fill: parent
-        }
-
-        ColumnLayout {
-            anchors.fill: parent
-            anchors.margins: addWindow.width * 0.05
-
-            Rectangle {
-                id: rect1
-                color: "white"
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                radius: addWindow.height * 0.02
-                opacity: 0.8
-
-                RowLayout {
-                    anchors.left: parent.left
-                    anchors.leftMargin: parent.width * 0.05
-                    anchors.verticalCenter: parent.verticalCenter
-                    spacing: addWindow.width * 0.1
-
-                    Label {
-                        text: "Artikel"
-                        font {
-                            family: "Serif"
-                            pointSize: addWindow.height * 0.05
-                        }
-                    }
-
-                    TextField {
-                        id: itemName
-                        Layout.fillWidth: true
-                        Layout.fillHeight: true
-                        Layout.minimumWidth: rect1.width * 0.6
-                        font {
-                            family: "Serif"
-                            pointSize: addWindow.height * 0.05
-                            italic: true
-                        }
-                    }
-                }
-            }
-
-            Rectangle {
-                id: rect2
-                color: "white"
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                radius: addWindow.height * 0.02
-                opacity: 0.8
-
-                RowLayout {
-                    anchors.left: parent.left
-                    anchors.leftMargin: parent.width * 0.05
-                    anchors.verticalCenter: parent.verticalCenter
-                    spacing: addWindow.width * 0.1
-
-                    Label {
-                        text: "Menge"
-                        font {
-                            family: "Serif"
-                            pointSize: addWindow.height * 0.05
-                        }
-                    }
-
-                    TextField {
-                        id: itemQuantity
-                        Layout.fillWidth: true
-                        Layout.minimumWidth: rect2.width * 0.6
-                        Layout.fillHeight: true
-                        font {
-                            family: "Serif"
-                            pointSize: addWindow.height * 0.05
-                            italic: true
-                        }
-                    }
-                }
-            }
-
-            RowLayout {
-                Layout.alignment: Qt.AlignHCenter
-                spacing: addWindow.width * 0.4
-
-                RoundButton {
-                    Material.background: Material.white
-                    Layout.minimumWidth: height
-                    Layout.fillHeight: true
-                    Layout.maximumHeight: addWindow.height * 0.3
-
-                    Image {
-                        anchors.centerIn: parent
-                        width: parent.width * 0.5
-                        height: parent.height * 0.5
-                        source: "images/decline.png"
-                    }
-
-                    onClicked: {
-                        addWindow.close()
-                    }
-                }
-
-                RoundButton {
-                    Material.background: Material.white
-                    Layout.minimumWidth: height
-                    Layout.fillHeight: true
-                    Layout.maximumHeight: addWindow.height * 0.3
-
-                    Image {
-                        anchors.centerIn: parent
-                        width: parent.width * 0.5
-                        height: parent.height * 0.5
-                        source: "images/accept.png"
-                    }
-
-                    onClicked: {
-                        if(itemName.length > 0) {
-                            listM.addItem(itemName.text, itemQuantity.text)
-                            save();
-                        }
-                        addWindow.close()
-                    }
-                }
-            }
-        }
-    }
+    InformationDrawer { id: infoDrawer }
 
     OpacityAnimator {
         id: opacityAnim
@@ -291,6 +202,7 @@ Window {
 
     function load() {
         if (datastore) {
+            listM.clear()
             listM.setItemsByJson(datastore)
         }
     }
