@@ -105,7 +105,7 @@ Drawer {
 
         Label {
             Text {
-                text: "Backgounds by <a href='https://pixabay.com'>Pixabay</a>"
+                text: "Backgrounds by <a href='https://pixabay.com'>Pixabay</a>"
                 onLinkActivated: Qt.openUrlExternally(link)
                 font {
                     family: fontFamily

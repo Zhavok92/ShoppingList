@@ -181,8 +181,6 @@ Window {
         }
     }
 
-
-
     AddItemPopup { id: addItemWindow }
 
     InformationDrawer { id: infoDrawer }
