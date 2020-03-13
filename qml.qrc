@@ -1,7 +1,0 @@
-<RCC>
-    <qresource prefix="/">
-        <file>main.qml</file>
-        <file>AddItemPopup.qml</file>
-        <file>InformationDrawer.qml</file>
-    </qresource>
-</RCC>

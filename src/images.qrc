@@ -1,0 +1,12 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qml/images/accept.png</file>
+        <file>qml/images/add.png</file>
+        <file>qml/images/addBackground.png</file>
+        <file>qml/images/appIcon.png</file>
+        <file>qml/images/decline.png</file>
+        <file>qml/images/drawer.png</file>
+        <file>qml/images/drawerBackground.png</file>
+        <file>qml/images/mainBackground.png</file>
+    </qresource>
+</RCC>
