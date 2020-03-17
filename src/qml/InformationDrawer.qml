@@ -71,7 +71,7 @@ Drawer {
         }
 
         Label {
-            text: "Version: 1.1"
+            text: "Version: 1.1.1"
             font {
                 family: fontFamily
                 pointSize: fontSize

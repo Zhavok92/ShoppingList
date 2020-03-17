@@ -35,17 +35,31 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 DISTFILES += \
+    AndroidManifest.xml \
+    AndroidManifest.xml \
     android/AndroidManifest.xml \
     android/build.gradle \
     android/gradle/wrapper/gradle-wrapper.jar \
     android/gradle/wrapper/gradle-wrapper.properties \
     android/gradlew \
     android/gradlew.bat \
-    android/res/values/libs.xml
+    android/res/values/libs.xml \
+    build.gradle \
+    build.gradle \
+    build.gradle \
+    build.gradle \
+    gradle/wrapper/gradle-wrapper.jar \
+    gradle/wrapper/gradle-wrapper.properties \
+    gradlew \
+    gradlew.bat \
+    res/values/libs.xml \
+    res/values/libs.xml \
+    res/values/libs.xml \
+    res/values/libs.xml
 
 contains(ANDROID_TARGET_ARCH,armeabi-v7a) {
     ANDROID_PACKAGE_SOURCE_DIR = \
-        $$PWD/android
+        $$PWD
 }
 
 HEADERS += \
