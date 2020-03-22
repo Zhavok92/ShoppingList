@@ -5,6 +5,7 @@ import QtQuick.Layouts 1.12
 import QtQuick.Controls.Material 2.12
 import QtGraphicalEffects 1.12
 import Qt.labs.settings 1.1
+import QtQml.Models 2.12
 
 Window {
     id: root
@@ -104,7 +105,7 @@ Window {
                     Layout.fillWidth: true
                     Layout.maximumWidth: mainWindow * 0.7
                     Layout.fillHeight: true
-                    model: listM
+                    model: visualModel
                     delegate: delegate
                     spacing: mainWindow.height * 0.02
                 }
@@ -114,70 +115,123 @@ Window {
         Component {
             id: delegate
 
-            Rectangle {
-                id: rect
+
+            MouseArea {
+                id: itemMouseA
+
+                property bool held: false
+
                 width: mainWindow.width * 0.9
                 height: mainWindow.height * 0.08
-                color: "white"
-                radius: mainWindow.height * 0.02
-                opacity: 0.8
 
-                Text {
-                    id: test
-                    text: name
-                    anchors.left: parent.left
-                    anchors.margins: parent.width * 0.1
-                    anchors.verticalCenter: parent.verticalCenter
-                    font {
-                        family: "Serif"
-                        pointSize: root.height * 0.03
-                        italic: true
-                    }
+                drag.target: held ? rect : undefined
+                drag.axis: Drag.YAxis
+                onPressAndHold: {
+                    held = true
+                    console.log("now")
+                }
+                onReleased: held = false
+
+                //drag.target: rect
+                //drag.axis: Drag.XAxis
+                //drag.minimumX: 0
+                //drag.maximumX: mainWindow.width
+                //onReleased: {
+                    //if(rect.x > mainWindow.width * 0.3) {
+                    //   listM.removeItem(index)
+                    //    save();
+                    //}
+                    //else {
+                    //    anim.start()
+                    //}
+                //}
+                onDoubleClicked: {
+                    addItemWindow.open()
+                    addItemWindow.iName = name
+                    addItemWindow.iQuantity = quantity
+                    addItemWindow.index = index
                 }
 
-                Text {
-                    text: quantity
-                    anchors.right: parent.right
-                    anchors.margins: parent.width * 0.1
-                    anchors.verticalCenter: parent.verticalCenter
-                    font {
-                        family: "Serif"
-                        pointSize: root.height * 0.03
-                        italic: true
+                Rectangle {
+                    id: rect
+                    width: parent.width
+                    height: parent.height
+                    anchors {
+                        horizontalCenter: parent.horizontalCenter
+                        verticalCenter: parent.verticalCenter
                     }
-                }
+                    //color: "white"
+                    color: itemMouseA.held ? "lightsteelblue" : "white"
+                    radius: mainWindow.height * 0.02
+                    opacity: 0.8
 
-                MouseArea {
-                    anchors.fill: parent
-                    drag.target: rect
-                    drag.axis: Drag.XAxis
-                    drag.minimumX: 0
-                    drag.maximumX: mainWindow.width
-                    onReleased: {
-                        if(rect.x > mainWindow.width * 0.3) {
-                            listM.removeItem(index)
-                            save();
+                    Drag.active: itemMouseA.held
+                    Drag.source: itemMouseA
+                    Drag.hotSpot.x: width / 2
+                    Drag.hotSpot.y: height / 2
+                    states: State {
+                        when: itemMouseA.held
+
+                        ParentChange { target: rect
+                                        //parent: listV
                         }
-                        else {
-                            anim.start()
+                        AnchorChanges {
+                            target: rect
+                            anchors { horizontalCenter: undefined; verticalCenter: undefined }
                         }
                     }
-                    onDoubleClicked: {
-                        addItemWindow.open()
-                        addItemWindow.iName = name
-                        addItemWindow.iQuantity = quantity
-                        addItemWindow.index = index
+
+                    Text {
+                        id: test
+                        text: name
+                        anchors.left: parent.left
+                        anchors.margins: parent.width * 0.1
+                        anchors.verticalCenter: parent.verticalCenter
+                        font {
+                            family: "Serif"
+                            pointSize: root.height * 0.03
+                            italic: true
+                        }
+                    }
+
+                    Text {
+                        text: quantity
+                        anchors.right: parent.right
+                        anchors.margins: parent.width * 0.1
+                        anchors.verticalCenter: parent.verticalCenter
+                        font {
+                            family: "Serif"
+                            pointSize: root.height * 0.03
+                            italic: true
+                        }
+                    }
+
+                    NumberAnimation {
+                        id: anim
+                        target: rect
+                        property: "x"
+                        to: listV.x
+                        duration: 300
                     }
                 }
 
-                NumberAnimation {
-                    id: anim
-                    target: rect
-                    property: "x"
-                    to: listV.x
-                    duration: 300
+                DropArea {
+                    anchors { fill: parent; margins: 10 }
+
+                    onEntered: {
+                        visualModel.items.move(
+                                drag.source.DelegateModel.itemsIndex,
+                                itemMouseA.DelegateModel.itemsIndex)
+                    }
                 }
             }
+        }
+
+        DelegateModel {
+            id: visualModel
+
+            model: listM
+            delegate: delegate
         }
     }
 
