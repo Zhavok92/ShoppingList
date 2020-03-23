@@ -105,7 +105,7 @@ Window {
                     Layout.fillWidth: true
                     Layout.maximumWidth: mainWindow * 0.7
                     Layout.fillHeight: true
-                    model: visualModel
+                    model: deleModel
                     delegate: delegate
                     spacing: mainWindow.height * 0.02
                 }
@@ -120,31 +120,35 @@ Window {
                 id: itemMouseA
 
                 property bool held: false
+                property int sourceIndex: -1
+                property int destinationIndex: -1
 
                 width: mainWindow.width * 0.9
                 height: mainWindow.height * 0.08
 
                 drag.target: held ? rect : undefined
-                drag.axis: Drag.YAxis
+                drag.axis: Drag.XAndYAxis
                 onPressAndHold: {
                     held = true
-                    console.log("now")
+                    sourceIndex = itemMouseA.DelegateModel.itemsIndex
                 }
-                onReleased: held = false
 
-                //drag.target: rect
-                //drag.axis: Drag.XAxis
-                //drag.minimumX: 0
-                //drag.maximumX: mainWindow.width
-                //onReleased: {
-                    //if(rect.x > mainWindow.width * 0.3) {
-                    //   listM.removeItem(index)
-                    //    save();
-                    //}
-                    //else {
-                    //    anim.start()
-                    //}
-                //}
+                onReleased: {
+                    if(held) {
+                        if(rect.x > mainWindow.width * 0.3) {
+                            listM.removeItem(index)
+                            save();
+                        }
+                        else {
+                            destinationIndex = itemMouseA.DelegateModel.itemsIndex
+                            console.log("Moved " + sourceIndex + " to " + destinationIndex)
+                            listM.move(sourceIndex, destinationIndex)
+                            held = false
+                            save()
+                        }
+                    }
+                }
+
                 onDoubleClicked: {
                     addItemWindow.open()
                     addItemWindow.iName = name
@@ -172,9 +176,6 @@ Window {
                     states: State {
                         when: itemMouseA.held
 
-                        ParentChange { target: rect
-                                        //parent: listV
-                        }
                         AnchorChanges {
                             target: rect
                             anchors { horizontalCenter: undefined; verticalCenter: undefined }
@@ -205,31 +206,21 @@ Window {
                             italic: true
                         }
                     }
-
-                    NumberAnimation {
-                        id: anim
-                        target: rect
-                        property: "x"
-                        to: listV.x
-                        duration: 300
-                    }
                 }
 
                 DropArea {
-                    anchors { fill: parent; margins: 10 }
+                    anchors.fill: parent
+                    anchors.margins: 10
 
                     onEntered: {
-                        visualModel.items.move(
-                                drag.source.DelegateModel.itemsIndex,
-                                itemMouseA.DelegateModel.itemsIndex)
+                        deleModel.items.move(drag.source.DelegateModel.itemsIndex, itemMouseA.DelegateModel.itemsIndex)
                     }
                 }
             }
         }
 
         DelegateModel {
-            id: visualModel
-
+            id: deleModel
             model: listM
             delegate: delegate
         }
