@@ -122,3 +122,7 @@ void ListModel::setItemsByJson(QString jsonStr) {
         qDebug() << "Loaded Item:" << val["name"].toString() << "[" << val["quantity"].toString() << "]";
     }
 }
+
+void ListModel::move(int sourceIndex, int destinationIndex) {
+    list.move(sourceIndex, destinationIndex);
+}

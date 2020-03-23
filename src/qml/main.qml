@@ -5,6 +5,7 @@ import QtQuick.Layouts 1.12
 import QtQuick.Controls.Material 2.12
 import QtGraphicalEffects 1.12
 import Qt.labs.settings 1.1
+import QtQml.Models 2.12
 
 Window {
     id: root
@@ -104,7 +105,7 @@ Window {
                     Layout.fillWidth: true
                     Layout.maximumWidth: mainWindow * 0.7
                     Layout.fillHeight: true
-                    model: listM
+                    model: deleModel
                     delegate: delegate
                     spacing: mainWindow.height * 0.02
                 }
@@ -114,70 +115,114 @@ Window {
         Component {
             id: delegate
 
-            Rectangle {
-                id: rect
+
+            MouseArea {
+                id: itemMouseA
+
+                property bool held: false
+                property int sourceIndex: -1
+                property int destinationIndex: -1
+
                 width: mainWindow.width * 0.9
                 height: mainWindow.height * 0.08
-                color: "white"
-                radius: mainWindow.height * 0.02
-                opacity: 0.8
 
-                Text {
-                    id: test
-                    text: name
-                    anchors.left: parent.left
-                    anchors.margins: parent.width * 0.1
-                    anchors.verticalCenter: parent.verticalCenter
-                    font {
-                        family: "Serif"
-                        pointSize: root.height * 0.03
-                        italic: true
-                    }
+                drag.target: held ? rect : undefined
+                drag.axis: Drag.XAndYAxis
+                onPressAndHold: {
+                    held = true
+                    sourceIndex = itemMouseA.DelegateModel.itemsIndex
                 }
 
-                Text {
-                    text: quantity
-                    anchors.right: parent.right
-                    anchors.margins: parent.width * 0.1
-                    anchors.verticalCenter: parent.verticalCenter
-                    font {
-                        family: "Serif"
-                        pointSize: root.height * 0.03
-                        italic: true
-                    }
-                }
-
-                MouseArea {
-                    anchors.fill: parent
-                    drag.target: rect
-                    drag.axis: Drag.XAxis
-                    drag.minimumX: 0
-                    drag.maximumX: mainWindow.width
-                    onReleased: {
+                onReleased: {
+                    if(held) {
                         if(rect.x > mainWindow.width * 0.3) {
                             listM.removeItem(index)
                             save();
                         }
                         else {
-                            anim.start()
+                            destinationIndex = itemMouseA.DelegateModel.itemsIndex
+                            console.log("Moved " + sourceIndex + " to " + destinationIndex)
+                            listM.move(sourceIndex, destinationIndex)
+                            held = false
+                            save()
                         }
-                    }
-                    onDoubleClicked: {
-                        addItemWindow.open()
-                        addItemWindow.iName = name
-                        addItemWindow.iQuantity = quantity
-                        addItemWindow.index = index
                     }
                 }
 
-                NumberAnimation {
-                    id: anim
-                    target: rect
-                    property: "x"
-                    to: listV.x
-                    duration: 300
+                onDoubleClicked: {
+                    addItemWindow.open()
+                    addItemWindow.iName = name
+                    addItemWindow.iQuantity = quantity
+                    addItemWindow.index = index
+                }
+
+                Rectangle {
+                    id: rect
+                    width: parent.width
+                    height: parent.height
+                    anchors {
+                        horizontalCenter: parent.horizontalCenter
+                        verticalCenter: parent.verticalCenter
+                    }
+                    //color: "white"
+                    color: itemMouseA.held ? "lightsteelblue" : "white"
+                    radius: mainWindow.height * 0.02
+                    opacity: 0.8
+
+                    Drag.active: itemMouseA.held
+                    Drag.source: itemMouseA
+                    Drag.hotSpot.x: width / 2
+                    Drag.hotSpot.y: height / 2
+                    states: State {
+                        when: itemMouseA.held
+
+                        AnchorChanges {
+                            target: rect
+                            anchors { horizontalCenter: undefined; verticalCenter: undefined }
+                        }
+                    }
+
+                    Text {
+                        id: test
+                        text: name
+                        anchors.left: parent.left
+                        anchors.margins: parent.width * 0.1
+                        anchors.verticalCenter: parent.verticalCenter
+                        font {
+                            family: "Serif"
+                            pointSize: root.height * 0.03
+                            italic: true
+                        }
+                    }
+
+                    Text {
+                        text: quantity
+                        anchors.right: parent.right
+                        anchors.margins: parent.width * 0.1
+                        anchors.verticalCenter: parent.verticalCenter
+                        font {
+                            family: "Serif"
+                            pointSize: root.height * 0.03
+                            italic: true
+                        }
+                    }
+                }
+
+                DropArea {
+                    anchors.fill: parent
+                    anchors.margins: 10
+
+                    onEntered: {
+                        deleModel.items.move(drag.source.DelegateModel.itemsIndex, itemMouseA.DelegateModel.itemsIndex)
+                    }
                 }
             }
+        }
+
+        DelegateModel {
+            id: deleModel
+            model: listM
+            delegate: delegate
         }
     }
 

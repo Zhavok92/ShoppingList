@@ -28,6 +28,7 @@ public:
     Q_INVOKABLE int count();
     Q_INVOKABLE QString getItemsAsJson();
     Q_INVOKABLE void setItemsByJson(QString jsonStr);
+    Q_INVOKABLE void move(int sourceIndex, int destinationIndex);
 
 signals:
 
