@@ -122,8 +122,9 @@ Window {
                 property bool held: false
                 property int sourceIndex: -1
                 property int destinationIndex: -1
+                property var oldRect: rect
 
-                width: mainWindow.width * 0.9
+                width: mainWindow.width
                 height: mainWindow.height * 0.08
 
                 drag.target: held ? rect : undefined
@@ -143,10 +144,10 @@ Window {
                             destinationIndex = itemMouseA.DelegateModel.itemsIndex
                             console.log("Moved " + sourceIndex + " to " + destinationIndex)
                             listM.move(sourceIndex, destinationIndex)
-                            held = false
                             save()
                         }
                     }
+                    held = false
                 }
 
                 onDoubleClicked: {
@@ -156,12 +157,31 @@ Window {
                     addItemWindow.index = index
                 }
 
+                DropArea {
+
+                    property string oldColor: rect.color
+
+                    width: mainWindow.width * 0.5
+                    height: mainWindow.height
+                    anchors.left: parent.right
+                    anchors.top: parent.top
+
+                    onEntered: {
+                        //rect.color = "red"
+                        itemMouseA.rect
+                    }
+
+                    onExited: {
+                        rect.color = "white"
+                    }
+                }
+
                 Rectangle {
                     id: rect
-                    width: parent.width
+                    width: parent.width * 0.9
                     height: parent.height
                     anchors {
-                        horizontalCenter: parent.horizontalCenter
+                        left: parent.left
                         verticalCenter: parent.verticalCenter
                     }
                     //color: "white"
@@ -178,12 +198,11 @@ Window {
 
                         AnchorChanges {
                             target: rect
-                            anchors { horizontalCenter: undefined; verticalCenter: undefined }
+                            anchors { left: undefined; verticalCenter: undefined }
                         }
                     }
 
                     Text {
-                        id: test
                         text: name
                         anchors.left: parent.left
                         anchors.margins: parent.width * 0.1
