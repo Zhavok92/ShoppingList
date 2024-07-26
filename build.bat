@@ -1,0 +1,1 @@
+D:\Libs\Qt\6.7.2\android_arm64_v8a\bin\qt-cmake.bat -DQT_ANDROID_BUILD_ALL_ABIS=TRUE -DANDROID_SDK_ROOT=D:/Programme/AndroidSDK -DANDROID_NDK_ROOT=D:/Programme/AndroidSDK/ndk/26.1.10909125 -B build -GNinja & cmake --build build --target apk

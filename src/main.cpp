@@ -1,34 +1,27 @@
-#include <QGuiApplication>
-#include <QQmlApplicationEngine>
-#include <QQuickStyle>
+#include <QtGui/qguiapplication.h>
+#include <QtQml/qqmlapplicationengine.h>
 #include <QQmlContext>
-#include "listmodel.h"
-#include "clipboard.h"
+#include <QQuickStyle>
+#include "gui/QmlClipboard.h"
+#include "gui/models/listmodel.h"
 
-int main(int argc, char *argv[]) {
-    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-
+int main(int argc, char* argv[]) {
     QGuiApplication app(argc, argv);
-    app.setOrganizationName("E-Ware");
-    app.setOrganizationDomain("example.com");
-    app.setApplicationName("ShoppingList");
+    QGuiApplication::setOrganizationName("CypeTech");
+    QGuiApplication::setApplicationName("ShoppingList");
 
     QQuickStyle::setStyle("Material");
 
     ListModel model;
-    Clipboard clipboard;
+    QmlClipboard qmlClipboard;
 
     QQmlApplicationEngine engine;
     engine.rootContext()->setContextProperty("listM", &model);
-    engine.rootContext()->setContextProperty("clipboard", &clipboard);
+    engine.rootContext()->setContextProperty("qmlClipboard", &qmlClipboard);
 
-    const QUrl url(QStringLiteral("qrc:/qml/main.qml"));
-    QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
-                     &app, [url](QObject *obj, const QUrl &objUrl) {
-        if (!obj && url == objUrl)
-            QCoreApplication::exit(-1);
-    }, Qt::QueuedConnection);
-    engine.load(url);
+    engine.loadFromModule("ShoppingList.Gui", "Main");
+    if(engine.rootObjects().isEmpty())
+        return -1;
 
     return app.exec();
 }
